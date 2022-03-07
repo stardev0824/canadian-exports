@@ -1,0 +1,4 @@
+<?php 
+
+
+// SELECT id, userid as user_id, name as company_name, email as company_email, concat(address,", ",city,", ",state,", ",country) as address, url as site, phone, fax,short_description, description,keywords as key_word FROM `magzine_bussiness` 

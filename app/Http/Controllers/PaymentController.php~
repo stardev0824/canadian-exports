@@ -1,0 +1,142 @@
+<?php
+
+
+namespace App\Http\Controllers;
+
+use App\Paypal\CreatePayment;
+use App\Paypal\ExecutePayment;
+use App\User;
+use Illuminate\Http\Request;
+
+	
+class PaymentController extends Controller
+{
+    public function create(Request $request)
+    {
+
+        if(\request()->path()=="register-revive")
+        {
+            $this->validate($request,['package'=>"required|in:one,two,three",]);
+            auth()->user()->update([
+                "package"=>$request->package,
+                "package_description"=>getPackageDescription($request->package)
+            ]);
+            session()->put("user_id",auth()->user()->id);
+        }
+
+        $payment = new CreatePayment();
+        $user = User::find(session("user_id"));
+        $description =$user->package_description;
+        if (session()->has("price") && isset($description)){
+            return $payment->create(session("price"),$description);
+        }
+        session()->flash("error","Oops Something Wrong, Payment failed");
+        return redirect("/");
+    }
+
+    public function execute(Request $request)
+    {
+        $payment=new ExecutePayment();
+        if (session()->has("user_id") && isset($request->PayerID) && isset($request->token))
+        {
+            $user = User::find(session("user_id"));
+            $user->update(["payment_status"=>"Waiting"]);
+            if (session()->has("price")){
+                return  $payment->execute($request,session("price"));
+            }
+            session()->flash("error","Oops Something Wrong, Payment failed");
+            return redirect("/");
+        }
+        session()->flash("error","Oops Something Wrong, Payment failed");
+        return redirect("/");
+
+    }
+    
+    public function cancel(Request $request){
+    	  $info_price = session("price");
+
+        session()->forget("price");
+        $user = User::find(session("user_id"));
+        $user->update([
+            "payment_status"=>"Canceled"
+        ]);
+        session()->forget("user_id");
+                /***********************************************/
+        
+    	  $info_ordernumber = $request->token;
+        $info_paymentId = $request->paymentId;
+		  $info_peyerid = $request->PayerID;
+        $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => $user->name ,"customerEmail" => $user->email, "itemName" => "Membership Package: ".substr($user->package_description,0,-8),"itemPrice" => $info_price);
+			system("php invoice/handler.php '".json_encode($orderDetails)."'");
+		  
+		  function sendgrid($to,$nameto,$subj,$message,$altmess=null,$attach=null){	
+				$postfields = 'from=no-reply@canadianexports.org&fromname=Canadian Exports&to='.$to.'&subject='.$subj.'&text='.urlencode($altmess).'&html='.urlencode($message);
+				$params = array(
+			    'to'        => $to,
+			    'subject'   => $subj,
+			    'html'      => $message,
+			    'text'      => urlencode($altmess),
+			    'from'      => 'no-reply@canadianexports.org',
+			    'fromname'      => 'Canadian Exports',
+			  );
+			  //    'files['.$fileName.']' => '@'.$filePath.'/'.$fileName
+			  if(isset($attach)){
+			  	 $file = explode("/",$attach);
+			  	 $params['files['.end($file).']'] = file_get_contents($attach);			  }
+			
+				$ch = curl_init('https://api.sendgrid.com/api/mail.send.json');		
+			
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				curl_setopt($ch, CURLOPT_VERBOSE, true);
+			
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				    'Authorization: Bearer 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'
+				));
+				 
+				// Submit the POST request
+				$result = curl_exec($ch);
+				 echo $result;
+				// Close cURL session handle
+				curl_close($ch);
+			}
+			sendgrid($user->email,$user->name,"Your receipt from Canadian Exports","
+Dear ".$user->name.",
+<br>
+<br>
+Thank you for your payment at canadianexport.<br>
+Please contact us in case you have any question.
+<br>
+<br>
+---
+<br>
+","","invoice/".$info_ordernumber.".pdf");
+
+			sendgrid($user->email,$user->name,"Welcome to Canadian Exports","
+Dear ".$user->name.",
+<br>
+Thank you for registering with www.canadianexports.org . We want to welcome you to our family, invite you to contact us anytime at any stage of the exporting process, and introduce you to the many benefits of registration,
+including:
+<ul>
+	<li>Leads, leads, and more leads; keep your sales department busy. We generate an average number of leads of over 7,000 a day, every day. If you want us to filter them out and send you the ones from YOUR Business
+Category, just send us an email.</li>
+
+	<li>Special Rates and discounts from many export-related service providers.</li>
+	<li>Financing Programs that cover part or all of your export-related. expenses. This includes loans, grants, tax credits, guarantees and advisors.</li>
+	<li>Live customer support Monday to Friday, between 09:00 and 17:00 EST.</li>
+	<li>Monthly report on how your Business Profile is doing: number of visitors, Bounce Rate, Conversion Rate, and so on</li>
+	<li>How other members in your Business Category are doing in terms of the same Ratios.</li>
+	<li>And much more</li>
+</ul>
+<h4>If you have any questions, call us at 1-877-333-3014</h4>
+<hr>
+This email was sent from an outgoing-only address that cannot accept incoming emails. if you haven't found the information you are looking for and still have questions, please visit our website to access general information,
+frequently asked questions, contact us information, and more.   
+
+");
+        session()->flash("error","User cancelled the payment.");   
+        return redirect("/");
+    }
+}

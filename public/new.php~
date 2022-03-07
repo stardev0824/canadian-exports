@@ -1,0 +1,5 @@
+<?php
+
+         $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => "sdda dasd","customerEmail" => "dsadasd@fsds.sd","itemName" => "Membership","itemPrice" => $info_price);
+			system("php invoice/handler.php '".json_encode($orderDetails)."'")
+?>
