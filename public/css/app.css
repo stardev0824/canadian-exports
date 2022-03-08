@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
 @font-face {
   font-family: futura;
-  src: url(../assets/front_end/font/futura.woff);
+  src: url(../assets/front_end/font/FuturaLT-Book.woff);
 }
 /*Custom css Add by Designer*/
 .serarch_icon_btn > img {

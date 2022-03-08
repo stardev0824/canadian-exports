@@ -1,3 +1,0 @@
-
-RewriteEngine on
-AddHandler application/x-httpd-php71 .php
