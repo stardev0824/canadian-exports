@@ -13,12 +13,37 @@ Route::get('/', function () {
 });
 
 Route::get('/send-test-mail', function () {
-    $to = "kapilpal3766@gmail.com";
-    $subject = "My subject";
-    $txt = "Hello world!";
-    $headers = "From: admin@canadianexports.org\r\n";
+    $user = \App\User::find(197);
+    $profile = $user->profile();
+    if($user->approved == "0") {
+        $to = env('ADMIN_MAIL');
+        echo $to;
+        $from = $user->email;
+
+        $categories = $profile->categories->toArray();
+        $categoryList = [];
+        foreach($categories as $one) 
+            array_push($categoryList, "\"".$one['name_en']."\"");
+        $categoryList = implode(", ", $categoryList);
+
+        $companyName = $profile->company_name;
+        $package = $user->package_description;
+        $token = hash('sha256', Str::random(60));
+        $user->update(['approved'=> $token]);
+        
+        $data = ['to'=>$to, 'from'=>$from, 'companyName'=>$companyName, 'categoryList'=>$categoryList, 'package'=>$package, 'token'=>$token];
+        Mail::send("mails.reg_to_admin", compact("data"), function($message) use ($data) {
+                $message->to($data['to'])
+                        ->from($data['from'])
+                        ->subject("Canadian Exports: New user registration");
+            });
+    }
+    // $to = "kapilpal3766@gmail.com";
+    // $subject = "My subject";
+    // $txt = "Hello world!";
+    // $headers = "From: admin@canadianexports.org\r\n";
     
-    mail($to,$subject,$txt,$headers);
+    // mail($to,$subject,$txt,$headers);
 });
 
 Auth::routes();

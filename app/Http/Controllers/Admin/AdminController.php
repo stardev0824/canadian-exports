@@ -132,4 +132,19 @@ class AdminController extends Controller
         Toastr::success("User Account has been deleted successfully","success");
         return redirect(aurl("user"));
     }
+
+    public function approveUser($token) {
+        $user = User::where('approved', $token);
+        if(isset($user)){   // when reqires approvement of admin regarding new user's registration.
+            // send welcome email to new user/business
+            $user->update(['approved'=>'1']);
+            Mail::send("mails.welcome_user", [], function($message) use ($user) {
+                $message->subject("Welcome to Canadian Exports")
+                        ->from(env('ADMIN_MAIL'))
+                        ->to($user->email);
+            })
+        }
+        
+        return redirect(aurl("dashboard"));
+    }
 }

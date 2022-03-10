@@ -32,7 +32,7 @@ Route::group(["prefix"=>"admin","as"=>"admin.","namespace"=>"Admin"],function ()
         Route::delete("info-letter/{id}","InfoLetterController@delete")->name("info-letter.destroy");
         Route::delete("user/{id}","AdminController@deleteUser")->name("user.destroy");
         Route::get("user","AdminController@getAllUsers")->name("user.index");
-
+        Route::get("user/approve/{token}", "AdminController@approveUser")->name("user.approve");
 
         Route::get("infos","SocialMediaController@index")->name("infos.index");
         Route::put("infos/update","SocialMediaController@update")->name("infos.update");

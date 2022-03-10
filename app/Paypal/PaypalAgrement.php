@@ -4,6 +4,7 @@ namespace App\Paypal;
 
 
 use App\User;
+use App\Admin;
 use Carbon\Carbon;
 use PayPal\Api\Agreement;
 use PayPal\Api\Payer;
@@ -70,12 +71,36 @@ class PaypalAgrement extends Paypal{
             "payment_status"=>"Completed",
             "expired_at"=>$expired_at
         ]);
+        $profile = $user->profile();
+        if($user->approved == "0") {
+            $to = env('ADMIN_MAIL');
+            echo $to;
+            $from = $user->email;
+    
+            $categories = $profile->categories->toArray();
+            $categoryList = [];
+            foreach($categories as $one) 
+                array_push($categoryList, "\"".$one['name_en']."\"");
+            $categoryList = implode(", ", $categoryList);
+    
+            $companyName = $profile->company_name;
+            $package = $user->package_description;
+            $token = hash('sha256', Str::random(60));
+            $user->update(['approved'=> $token]);
+            
+            $data = ['to'=>$to, 'from'=>$from, 'companyName'=>$companyName, 'categoryList'=>$categoryList, 'package'=>$package, 'token'=>$token];
+            Mail::send("mails.reg_to_admin", compact("data"), function($message) use ($data) {
+                $message->to($data['to'])
+                        ->from($data['from'])
+                        ->subject("Canadian Exports: New user registration");
+            });
+        }
 
-            session()->flash("success","Congratulations! Your profile was successfully created!");
+        session()->flash("success","Congratulations! Your profile was successfully created!");
 		$info_price = $pPrice;
 		$info_ordernumber=$this->generateRandomString();
         $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => $user->name ,"customerEmail" => $user->email, "itemName" => "Membership Package: ".substr($user->package_description,0,-8),"itemPrice" => $info_price);
-			system("php invoice/handler.php '".json_encode($orderDetails)."'");
+		system("php invoice/handler.php '".json_encode($orderDetails)."'");
 		  
 // 		  function sendgrid($to,$nameto,$subj,$message,$altmess=null,$attach=null){	
 // 				$postfields = 'from=no-reply@canadianexports.org&fromname=Canadian Exports&to='.$to.'&subject='.$subj.'&text='.urlencode($altmess).'&html='.urlencode($message);
