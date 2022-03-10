@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string("package_description")->nullable();
             $table->string("paid_amount")->default(0);
             $table->string('password');
+            $table->integer('approved')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
