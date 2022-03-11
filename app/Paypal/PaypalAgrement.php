@@ -45,15 +45,7 @@ class PaypalAgrement extends Paypal{
 		$pPrice=0;
 		$user = User::find(session("user_id"));
 
-		if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="one"){
-            $pPrice=6.99;
-        }
-        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="two"){
-            $pPrice=13.98;
-        }
-        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="three"){
-            $pPrice=55.92;
-        }
+		$pPrice = session('price');
         $expired_at=null;
         if ($user->expired_at==null || $user->expired_at< now())
         {
@@ -73,30 +65,10 @@ class PaypalAgrement extends Paypal{
         ]);
         $profile = $user->profile();
         if($user->approved == "0") {
-            $to = env('ADMIN_MAIL');
-            echo $to;
-            $from = $user->email;
-    
-            $categories = $profile->categories->toArray();
-            $categoryList = [];
-            foreach($categories as $one) 
-                array_push($categoryList, "\"".$one['name_en']."\"");
-            $categoryList = implode(", ", $categoryList);
-    
-            $companyName = $profile->company_name;
-            $package = $user->package_description;
-            $token = hash('sha256', Str::random(60));
-            $user->update(['approved'=> $token]);
-            
-            $data = ['to'=>$to, 'from'=>$from, 'companyName'=>$companyName, 'categoryList'=>$categoryList, 'package'=>$package, 'token'=>$token];
-            Mail::send("mails.reg_to_admin", compact("data"), function($message) use ($data) {
-                $message->to($data['to'])
-                        ->from($data['from'])
-                        ->subject("Canadian Exports: New user registration");
-            });
+            sendUserRegistrationMailToAdmin($user);
+            session()->flash("success","Congratulations! Your profile was successfully created!\n Wating for approvement.");
         }
 
-        session()->flash("success","Congratulations! Your profile was successfully created!");
 		$info_price = $pPrice;
 		$info_ordernumber=$this->generateRandomString();
         $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => $user->name ,"customerEmail" => $user->email, "itemName" => "Membership Package: ".substr($user->package_description,0,-8),"itemPrice" => $info_price);

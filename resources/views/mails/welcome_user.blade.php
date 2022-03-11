@@ -6,7 +6,7 @@
         </style>
     </head>
     <body>
-        <div style="height:300px">
+        <div style="height:500px">
             <div>
                 <p>
                     Dear Roman Antonyuk - Export & Marketing Manager,

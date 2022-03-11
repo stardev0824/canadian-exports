@@ -17,7 +17,7 @@ class PaymentController extends Controller
 
         if(\request()->path()=="register-revive")
         {
-            $this->validate($request,['package'=>"required|in:one,two,three",]);
+            $this->validate($request,['package'=>"required|in:zero,one,two,three,four,five,six"]);
             auth()->user()->update([
                 "package"=>$request->package,
                 "package_description"=>getPackageDescription($request->package)
@@ -26,9 +26,11 @@ class PaymentController extends Controller
         }
          // dd(session()->has('recuring') == true);
         if(session()->has('recuring') == true){
-            //dd(session()->has('recuring') == true);
             return redirect()->route('rpayment',"12345");
         }
+        if($request->package == "zero")  // in Free plan. Don't need to pay
+            return redirect("/");
+
         $payment = new CreatePayment();
         $user = User::find(session("user_id"));
         $description =$user->package_description;

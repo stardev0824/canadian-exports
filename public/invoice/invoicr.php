@@ -145,7 +145,13 @@ class Invoicr{
 		if (!file_exists($file)) { die("$file not found."); }
 		$this->data = "";
 		require $file;
-
+		//Mail to User/Company
+		Mail::send([], [], function($message) {
+			$message->subject("Invoice")
+					->from(env('ADMIN_MAIL'))
+					->to($this->billto[1])
+					->setBody($this->data, "text/html");
+		})
 		// OUTPUT
 		switch ($mode) {
 			// SHOW IN BROWSER

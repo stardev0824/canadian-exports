@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->enum("payment_status",["Completed","false","Waiting","Canceled"])->default("false");
             $table->date("expired_at")->nullable();
-            $table->enum("package",["one","two","three"])->nullable();
+            $table->enum("package",["zero", "one","two","three", "four", "five", "six"])->nullable();
             $table->string("package_description")->nullable();
             $table->string("paid_amount")->default(0);
             $table->string('password');

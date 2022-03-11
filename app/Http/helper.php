@@ -153,9 +153,14 @@ if (!function_exists("getPackageDescription"))
     function getPackageDescription($package)
     {
         switch ($package){
-            case "one":session()->put("price",6.99); return "One months subscription - $6.99";
-            case "two":session()->put("price",13.98);return "Three months subscription - $13.98 (one months free)";
-            default :session()->put("price",55.92); return "One year subscription - $55.92 (four months free)";
+            case "zero": session()->put("price", 0); return "Free plan";
+            case "one": session()->put("price", 6.99); return "One months subscription - $6.99";
+            case "two": session()->put("price", 13.98);return "Three months subscription - $13.98 (one months free)";
+            case "three": session()->put("price", 55.92); return "One year subscription - $55.92 (four months free)";
+            case "four": session()->put("price", 69.9); return "One months subscription - $69.9";
+            case "five": session()->put("price", 139.8);return "Three months subscription - $139.8 (one months free)";
+            case "six": session()->put("price", 559.2); return "One year subscription - $559.2 (four months free)";
+            default: break;
         }
     }
 }
@@ -221,5 +226,32 @@ if (!function_exists("getCurrentIssue")){
     function getCurrentIssue(){
         $issue = Issue::where("is_current_issue",true)->orderBy("created_at","desc")->get()->first();
         return isset($issue)?$issue:null;
+    }
+}
+
+if (!function_exists("sendUserRegistrationMailToAdmin")){
+    function sendUserRegistrationMailToAdmin($user){
+        $profile = $user->profile();
+
+        $to = env('ADMIN_MAIL');
+        $from = $user->email;
+
+        $categories = $profile->categories->toArray();
+        $categoryList = [];
+        foreach($categories as $one) 
+            array_push($categoryList, "\"".$one['name_en']."\"");
+        $categoryList = implode(", ", $categoryList);
+
+        $companyName = $profile->company_name;
+        $package = $user->package_description;
+        $token = hash('sha256', Str::random(60));
+        $user->update(['approved'=> $token]);
+        
+        $data = ['to'=>$to, 'from'=>$from, 'companyName'=>$companyName, 'categoryList'=>$categoryList, 'package'=>$package, 'token'=>$token];
+        Mail::send("mails.reg_to_admin", compact("data"), function($message) use ($data) {
+            $message->to($data['to'])
+                    ->from($data['from'])
+                    ->subject("Canadian Exports: New user registration");
+        });
     }
 }

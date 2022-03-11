@@ -67,23 +67,61 @@
                 setcookie("vars", "");
             }
             ?>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="package" id="one" value="one" checked>
-                <label class="form-check-label" for="one">
-                    One-month subscription - $6.99*
-                </label>
+            <div class="row mt-4">
+                <div class="col-md-3 col-sm-12">
+                    <h4 class="card-title"><i>Free</i></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="zero" value="zero" checked>
+                        <label class="form-check-label" for="zero">
+                            Free <br>(If you are a small and new business, you may register for free)
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-12">
+                    <h4 class="card-title"><i>Premium</i></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="one" value="one">
+                        <label class="form-check-label" for="one">
+                            One-month subscription - $6.99*
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="two" value="two">
+                        <label class="form-check-label" for="two">
+                            Three-months subscription - $13.98* (one months free)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="three" value="three">
+                        <label class="form-check-label" for="three">
+                            One-year subscription - $55.92* (four months free)
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <h4 class="card-title"><i>Featured</i></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="four" value="four">
+                        <label class="form-check-label" for="four">
+                            One-month subscription - $69.9*
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="five" value="five">
+                        <label class="form-check-label" for="five">
+                            Three-months subscription - $139.8* (one months free)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="package" id="six" value="six">
+                        <label class="form-check-label" for="six">
+                            One-year subscription - $559.2* (four months free)
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="package" id="two" value="two">
-                <label class="form-check-label" for="two">
-                    Three-months subscription - $13.98* (one months free)
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="package" id="three" value="three">
-                <label class="form-check-label" for="three">
-                    One-year subscription - $55.92* (four months free)
-                </label>
+            <div class="mt-3">
+                What are the differences between these registration packages? <a href="#">Click here</a>
             </div>
             @error("package")
             <small id="invalid-pw" class="form-text ml-3 text-danger"><i class="far fa-times-circle mr-2"></i>

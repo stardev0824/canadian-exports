@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
+	<?php 
+		$plan = "Free";
+
+		if($user->package == 'zero')
+			$itemCost = "$0";
+		else if($user->package == 'one' || $user->package == 'two' || $user->package == 'three') {
+			$plan = "Premium";
+			$itemCost = explode(" ", $user->package_description)[4];
+		}
+		else {
+			$plan = "Featured";
+			$itemCost = explode(" ", $user->package_description)[4];
+		}
+	?>
     <div class="container p-5">
     	<div class="row">
     		<div class="padding-y col-12">
@@ -18,10 +32,10 @@
 
         <div class="mb-5" style="padding: 0px;">
 	        <div class="row mt-2">
-		        	<div class="col-5">
+		        	<div class="col-6">
 		            <h5 class="text-blue font">Registration Package:</h5>
 		            <p style="line-height: 30px;">
-		                {{$user->package_description}}
+		                <b><i>{{$plan}}</i></b>:  {{$user->package_description}}
 		            </p>
 		        	</div>
 		        	<div class="col-5">
@@ -206,7 +220,7 @@
         			</div>
         			<div class="row border p-1" style="margin-right: 0px;margin-left:0px">
         				<div class="col-8">Total Item Cost</div>	
-        				<div class="col-4"><?php print_r(explode(" ",$user->package_description)[4]); ?></div>	        		
+        				<div class="col-4">{{ $itemCost }}</div>	        		
         			</div>
         			<div class="row border p-1" style="margin-right: 0px;margin-left:0px">
         				<div class="col-8">Shipping Fees</div>		        		
@@ -214,7 +228,7 @@
         			</div>
         			<div class="row border p-1"  style="font-size:16px;font-weight:bold;margin-right: 0px;margin-left:0px">
         				<div class="col-8">Subtotal</div>		        		
-        				<div class="col-4"><?php print_r(explode(" ",$user->package_description)[4]); ?></div>	        		
+        				<div class="col-4">{{ $itemCost }}</div>	        		
         			</div>
         		</div>
 	        </div>

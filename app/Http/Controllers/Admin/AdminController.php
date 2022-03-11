@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -142,7 +143,7 @@ class AdminController extends Controller
                 $message->subject("Welcome to Canadian Exports")
                         ->from(env('ADMIN_MAIL'))
                         ->to($user->email);
-            })
+            });
         }
         
         return redirect(aurl("dashboard"));

@@ -22,17 +22,29 @@ class SubscriptionController extends Controller
         return $plan->active($id);
 
     }
-        public function createAgrement($id){
-            // dd(session()->has('recuringPackage')==true );
-            if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="one"){
-                $id="P-0413594924882850CN6BUMNY";
-            }
-            if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="two"){
-                $id="P-854646590J667164WN6CMNNQ";
-            }
-            if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="three"){
-                $id="P-56199853UL1936346N55QCPI";
-            }
+    public function createAgrement($id){
+        // dd(session()->has('recuringPackage')==true );
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="zero"){
+            $id="P-0413594924882850CN6BUMNY";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="one"){
+            $id="P-0413594924882850CN6BUMNY";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="two"){
+            $id="P-854646590J667164WN6CMNNQ";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="three"){
+            $id="P-56199853UL1936346N55QCPI";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="four"){
+            $id="P-0413594924882850CN6BUMNY";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="five"){
+            $id="P-854646590J667164WN6CMNNQ";
+        }
+        if(session()->has('recuringPackage')==true && session()->get('recuringPackage')=="six"){
+            $id="P-56199853UL1936346N55QCPI";
+        }
         $plan= new PaypalAgrement();
         return $plan->create($id);
 

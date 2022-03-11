@@ -52,15 +52,18 @@ class ExecutePayment extends Paypal
                 "payment_status"=>"Completed",
                 "expired_at"=>$expired_at
             ]);
-            session()->flash("success","Congratulations! Your profile was successfully created!");
-            
+            $profile = $user->profile();
+            if($user->approved == "0") {
+                sendUserRegistrationMailToAdmin($user);
+                session()->flash("success","Congratulations! Your profile was successfully created! \nWating for approvement.");
+            }
 
         /***********************************************/
-        $info_price = session("price");
-    	  $info_ordernumber = $request->token;
-        $info_paymentId = $request->paymentId;
-		  $info_peyerid = $request->PayerID;
-        $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => $user->name ,"customerEmail" => $user->email, "itemName" => "Membership Package: ".substr($user->package_description,0,-8),"itemPrice" => $info_price);
+            $info_price = session("price");
+    	    $info_ordernumber = $request->token;
+            $info_paymentId = $request->paymentId;
+		    $info_peyerid = $request->PayerID;
+            $orderDetails = array("orderNumber" => $info_ordernumber,"customerName" => $user->name ,"customerEmail" => $user->email, "itemName" => "Membership Package: ".substr($user->package_description,0,-8),"itemPrice" => $info_price);
 			system("php invoice/handler.php '".json_encode($orderDetails)."'");
 		  
 // 		  function sendgrid($to,$nameto,$subj,$message,$altmess=null,$attach=null){	
