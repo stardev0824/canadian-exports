@@ -18,11 +18,14 @@ body{
 	overflow-x: hidden;
 }
 p,span{
-    font-family: 'Roboto', sans-serif !important;
+    font-family: 'futura' !important;
 }
 
 ::placeholder{
-    color: red !important;
+    color: rgb(185, 185, 185);
+}
+:focus::placeholder {
+    color : transparent;
 }
 .nav-bt {
     color: white !important;
@@ -615,7 +618,7 @@ thead.thead-blue th {
     text-transform: lowercase;
 }
  
-input::placeholder {
+/* input::placeholder {
   color: transparent !important;
 }
 textarea::placeholder {
@@ -633,7 +636,7 @@ input:focus::placeholder {
 }
 textarea:focus::placeholder {
   color: transparent !Important;
-}
+} */
 .contact-flex h5 {
     margin: 0;
     margin-right: 10px;

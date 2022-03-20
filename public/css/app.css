@@ -67,9 +67,6 @@
 p{
 	text-align: justify !important;
 }
-::placeholder{
-	color: red !important;
-}
 .animated-icon1, .animated-icon2, .animated-icon3 {
 width: 30px;
 height: 20px;
@@ -241,3 +238,173 @@ left: 8px;
     cursor: pointer !important;
 }
 /* Burger Menu End*/
+
+/** Fury's custom button group **/
+
+/** usage
+	<button class="customBtn-01" role="button">Button 29</button>
+*/
+
+/* CSS */
+.customBtn-01 {
+  align-items: center;
+  appearance: none;
+  background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+}
+
+.customBtn-01:focus {
+  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.customBtn-01:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.customBtn-01 a:hover {
+	color : white !important;
+}
+
+.customBtn-01:active {
+  box-shadow: #3c4fe0 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+
+/* usage 
+	<button class="customBtn-02-pushable" role="button">
+	<span class="customBtn-02-shadow"></span>
+	<span class="customBtn-02-edge"></span>
+	<span class="customBtn-02-front text">
+		Button 82
+	</span>
+	</button>
+*/
+
+/* CSS */
+.customBtn-02-pushable {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  transition: filter 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.customBtn-02-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: hsl(0deg 0% 0% / 0.25);
+  will-change: transform;
+  transform: translateY(2px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+.customBtn-02-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(
+    to left,
+    hsl(340deg 100% 16%) 0%,
+    hsl(340deg 100% 32%) 8%,
+    hsl(340deg 100% 32%) 92%,
+    hsl(340deg 100% 16%) 100%
+  );
+}
+
+.customBtn-02-front {
+  display: block;
+  position: relative;
+  padding: 12px 27px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  color: white;
+  background: hsl(345deg 100% 47%);
+  will-change: transform;
+  transform: translateY(-4px);
+  transition:
+    transform
+    600ms
+    cubic-bezier(.3, .7, .4, 1);
+}
+
+@media (min-width: 768px) {
+  .customBtn-02-front {
+    font-size: 1.25rem;
+    padding: 12px 42px;
+  }
+}
+
+.customBtn-02-pushable:hover {
+  filter: brightness(110%);
+}
+
+.customBtn-02-pushable:hover .customBtn-02-front {
+  transform: translateY(-6px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.customBtn-02-pushable:active .customBtn-02-front {
+  transform: translateY(-2px);
+  transition: transform 34ms;
+}
+
+.customBtn-02-pushable:hover .customBtn-02-shadow {
+  transform: translateY(4px);
+  transition:
+    transform
+    250ms
+    cubic-bezier(.3, .7, .4, 1.5);
+}
+
+.customBtn-02-pushable:active .customBtn-02-shadow {
+  transform: translateY(1px);
+  transition: transform 34ms;
+}
+
+.customBtn-02-pushable:focus:not(:focus-visible) {
+  outline: none;
+}
