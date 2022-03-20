@@ -12,8 +12,8 @@ return [
         'log.LogLevel' => 'ERROR'
     ),
         'url'=>[
-        'success'=>'https://canadian.futuresol.com.au/execute-aggrement/true',
-        'failure'=>'https://canadian.futuresol.com.au/execute-aggrement/false'
+        'success'=>'https://www.canadianexports.org/execute-aggrement/true',
+        'failure'=>'https://www.canadianexports.org/execute-aggrement/false'
     ]
 ];
 
